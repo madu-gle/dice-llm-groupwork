@@ -1,3 +1,4 @@
 .env
 results/
 __pycache__/
+evaluation_results.csv

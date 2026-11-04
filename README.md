@@ -12,21 +12,16 @@
 
 # Evaluation
 
-`evaluate.py` compares three systems on a hand-made gold set (`eval/qa_eu_ai_act.json`,
-16 in-corpus questions with the passage that answers them + 2 out-of-scope questions):
+`evaluate.py` asks 10 EU AI Act questions to three systems:
 
-| system | what it is |
-|---|---|
-| `direct` | LLM without any context (baseline required by the brief) |
-| `naive_rag` | fixed 1000-char chunks, semantic top-k, simple grounded prompt ("base RAG") |
-| `group2` | our pipeline in `group_2_rag.py` |
+- `direct`: the LLM without any context (baseline)
+- `naive_rag`: fixed 1000-char chunks + semantic search (base RAG)
+- `group2`: our pipeline in `main.py`
+
+For each answer it checks whether the passage that answers the question was retrieved, and whether the answer contains an expected keyword.
 
 ```bash
-python evaluate.py --retrieval-only    # retrieval metrics only, no API key needed
-python evaluate.py                     # + answer metrics (fact recall, abstention)
-python evaluate.py --judge             # + LLM-as-judge correctness / groundedness
+python evaluate.py
 ```
 
-Results land in `results/eval_<timestamp>.csv` (per question, incl. answers) and `.md` (summary table).
-To test a new improvement, add a `run_<name>` function to `SYSTEMS` in `evaluate.py` and rerun.
-Extend the gold set by adding entries to the JSON; `evidence` must be a verbatim snippet from the PDF text.
+Prints a summary and saves all answers to `evaluation_results.csv`.
