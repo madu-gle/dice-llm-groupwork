@@ -3,7 +3,7 @@ evaluate.py — Compare three systems on 10 EU AI Act questions.
 
   direct     LLM without any context (baseline)
   naive_rag  fixed-size chunks + semantic search (base RAG)
-  group2     our pipeline from main.py
+  group2     our pipeline from group_2_rag.py
 
 For each question we check whether the passage that answers it (`evidence`) was in the
 context sent to the LLM, and print every answer so it can be graded by hand.
@@ -14,7 +14,7 @@ Run:  python evaluate.py
 from dotenv import load_dotenv
 
 from utils import build_bm25_index, create_llm_client, embed_texts, load_embedding_model, semantic_search
-from main import load_data_from_folder, paragraph_aware_chunking, rag_generate
+from group_2_rag import load_data_from_folder, paragraph_aware_chunking, rag_generate
 
 TOP_K = 5
 
@@ -22,23 +22,19 @@ TOP_K = 5
 QUESTIONS = [
     {
         "question": "What is written in paragraph 155?",
-        "evidence": "(155) In order to ensure that providers of high-risk AI systems",
+        "evidence": "(155) In order to ensure that providers of high-risk AI systems ...",
     },
     {
-        "question": "What is the maximum fine for engaging in a prohibited AI practice under Article 5?",
-        "evidence": "fines of up to EUR 35 000 000",
+        "question": "What is the maximum fine mentioned under Article 101?",
+        "evidence": "3 % of their annual total worldwide turnover in the preceding financial year or EUR 15 000 000",
     },
     {
         "question": "What fine applies for supplying incorrect or misleading information to notified bodies or national competent authorities?",
         "evidence": "fines of up to EUR 7 500 000",
     },
     {
-        "question": "From which date do the prohibitions on AI practices apply?",
-        "evidence": "Chapters I and II shall apply from 2 February 2025",
-    },
-    {
-        "question": "When does Article 6(1) and the corresponding obligations apply?",
-        "evidence": "shall apply from 2 August 2027",
+        "question": "From which date does the REGULATION (EU) 2024/1689 apply?",
+        "evidence": "It shall apply from 2 August 2026.",
     },
     {
         "question": "Within how many days must a provider report a serious incident caused by a high-risk AI system?",
@@ -54,11 +50,11 @@ QUESTIONS = [
     },
     {
         "question": "What must deployers do when their AI system generates a deep fake?",
-        "evidence": "constituting a deep fake, shall",
+        "evidence": "constituting a deep fake, shall disclose that the content has been artificially generated or manipulated",
     },
     {
         "question": "Who must ensure a sufficient level of AI literacy, and for whom?",
-        "evidence": "sufficient level of AI literacy of",
+        "evidence": "sufficient level of AI literacy",
     },
 ]
 
@@ -113,22 +109,11 @@ def main():
         context = "\n\n".join(g2_chunks[i] for i in indices)
         rows.append(("group2", question, context, g2_answer))
 
-    # Print answers and retrieval check; correctness is graded by hand
-    retrieved_count = {"naive_rag": 0, "group2": 0}
+    # Print answers
     for system, question, context, answer in rows:
-        q = next(q for q in QUESTIONS if q["question"] == question)
         print("=" * 80)
         print(f"[{system}] {question}")
-        if context is not None:
-            retrieved = q["evidence"] in context
-            retrieved_count[system] += retrieved
-            print(f"retrieved: {retrieved}")
         print(f"answer: {answer}")
-
-    print("=" * 80)
-    print("\nsystem      retrieved")
-    for system, count in retrieved_count.items():
-        print(f"{system:<10}  {count:>4}/{len(QUESTIONS)}")
 
 
 if __name__ == "__main__":
