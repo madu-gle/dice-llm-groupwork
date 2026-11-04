@@ -80,7 +80,7 @@ def main():
     naive_emb = embed_texts(naive_chunks, embed_model)
 
     # Group 2 index
-    g2_chunks, g2_sources = paragraph_aware_chunking(clean_docs)
+    g2_chunks, g2_meta = paragraph_aware_chunking(clean_docs)
     g2_bm25 = build_bm25_index(g2_chunks)
     g2_emb = embed_texts(g2_chunks, embed_model)
 
@@ -104,7 +104,7 @@ def main():
 
         # 3. Group 2 RAG
         g2_answer, _, indices = rag_generate(
-            question, llm, g2_bm25, embed_model, g2_emb, g2_chunks, g2_sources,
+            question, llm, g2_bm25, embed_model, g2_emb, g2_chunks, g2_meta,
             top_k=TOP_K, return_indices=True,
         )
         context = "\n\n".join(g2_chunks[i] for i in indices)
