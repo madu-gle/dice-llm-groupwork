@@ -6,13 +6,10 @@ evaluate.py — Compare three systems on 10 EU AI Act questions.
   group2     our pipeline from main.py
 
 For each question we check whether the passage that answers it (`evidence`) was in the
-context sent to the LLM. Answers are saved to evaluation_results.csv and graded by hand
-in the `correct` column.
+context sent to the LLM, and print every answer so it can be graded by hand.
 
 Run:  python evaluate.py
 """
-
-import csv
 
 from dotenv import load_dotenv
 
@@ -116,25 +113,22 @@ def main():
         context = "\n\n".join(g2_chunks[i] for i in indices)
         rows.append(("group2", question, context, g2_answer))
 
-    # Score retrieval; correctness is graded by hand in the CSV
-    results = []
+    # Print answers and retrieval check; correctness is graded by hand
+    retrieved_count = {"naive_rag": 0, "group2": 0}
     for system, question, context, answer in rows:
         q = next(q for q in QUESTIONS if q["question"] == question)
-        retrieved = q["evidence"] in context if context is not None else None
-        results.append({"system": system, "question": question, "retrieved": retrieved,
-                        "answer": answer, "correct": ""})
-        print(f"{system:<10} retrieved={retrieved!s:<5} {question}")
+        print("=" * 80)
+        print(f"[{system}] {question}")
+        if context is not None:
+            retrieved = q["evidence"] in context
+            retrieved_count[system] += retrieved
+            print(f"retrieved: {retrieved}")
+        print(f"answer: {answer}")
 
+    print("=" * 80)
     print("\nsystem      retrieved")
-    for system in ["naive_rag", "group2"]:
-        r = [x for x in results if x["system"] == system]
-        print(f"{system:<10}  {sum(x['retrieved'] for x in r):>4}/{len(r)}")
-
-    with open("evaluation_results.csv", "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=results[0].keys())
-        writer.writeheader()
-        writer.writerows(results)
-    print("\nAll answers saved to evaluation_results.csv - fill in the 'correct' column by hand")
+    for system, count in retrieved_count.items():
+        print(f"{system:<10}  {count:>4}/{len(QUESTIONS)}")
 
 
 if __name__ == "__main__":
