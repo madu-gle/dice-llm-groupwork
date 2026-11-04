@@ -1,0 +1,146 @@
+[
+  {
+    "id": "q01",
+    "type": "recital_lookup",
+    "question": "What is written in paragraph 155?",
+    "reference_answer": "Recital (155) says all providers of high-risk AI systems should have a post-market monitoring system in place, so they can use experience from the use of their systems to improve them and take corrective action in a timely manner.",
+    "required_facts": [["post-market monitoring", "post market monitoring"], ["high-risk", "high risk"]],
+    "evidence": "(155) In order to ensure that providers of high-risk AI systems can take into account the experience"
+  },
+  {
+    "id": "q02",
+    "type": "factual",
+    "question": "What is the maximum administrative fine for engaging in a prohibited AI practice under Article 5?",
+    "reference_answer": "Up to EUR 35 000 000 or, for an undertaking, up to 7 % of total worldwide annual turnover for the preceding financial year, whichever is higher (Article 99(3)).",
+    "required_facts": [["35000000", "35 million", "35m"], ["7%", "7 %", "seven percent", "7 percent"]],
+    "evidence": "Non-compliance with the prohibition of the AI practices referred to in Article 5 shall be subject to administrative fines of up to EUR 35 000 000"
+  },
+  {
+    "id": "q03",
+    "type": "factual",
+    "question": "What fine applies for supplying incorrect, incomplete or misleading information to notified bodies or national competent authorities?",
+    "reference_answer": "Up to EUR 7 500 000 or, for an undertaking, up to 1 % of total worldwide annual turnover, whichever is higher (Article 99(5)).",
+    "required_facts": [["7500000", "7.5 million", "7,5 million"], ["1%", "1 %", "one percent", "1 percent"]],
+    "evidence": "reply to a request shall be subject to administrative fines of up to EUR 7 500 000"
+  },
+  {
+    "id": "q04",
+    "type": "factual",
+    "question": "From which date does the AI Act generally apply, and when do the prohibitions in Chapter II start to apply?",
+    "reference_answer": "It generally applies from 2 August 2026; Chapters I and II (including the prohibited practices) apply from 2 February 2025 (Article 113).",
+    "required_facts": [["2 august 2026", "august 2, 2026", "2026-08-02"], ["2 february 2025", "february 2, 2025", "2025-02-02"]],
+    "evidence": "(a) Chapters I and II shall apply from 2 February 2025"
+  },
+  {
+    "id": "q05",
+    "type": "factual",
+    "question": "When does Article 6(1) and the corresponding obligations apply?",
+    "reference_answer": "From 2 August 2027 (Article 113(c)).",
+    "required_facts": [["2 august 2027", "august 2, 2027", "2027-08-02"]],
+    "evidence": "(c) Article 6(1) and the corresponding obligations in this Regulation shall apply from 2 August 2027"
+  },
+  {
+    "id": "q06",
+    "type": "factual",
+    "question": "Above what amount of training compute is a general-purpose AI model presumed to have high impact capabilities?",
+    "reference_answer": "When the cumulative amount of computation used for its training, measured in floating point operations, is greater than 10^25 FLOPs (Article 51(2)).",
+    "required_facts": [["10^25", "10²⁵", "1025", "10 25", "1e25", "10e25"], ["floating point", "flop"]],
+    "evidence": "when the cumulative amount of computation used for its training measured in floating point operations is greater than"
+  },
+  {
+    "id": "q07",
+    "type": "factual",
+    "question": "Within what deadline must a provider of a high-risk AI system report a serious incident?",
+    "reference_answer": "Immediately after establishing a causal link (or reasonable likelihood), and in any event not later than 15 days after becoming aware; for widespread infringements not later than two days (Article 73).",
+    "required_facts": [["15 days", "fifteen days"]],
+    "evidence": "not later than 15 days after the provider or, where applicable, the deployer, becomes aware of the serious incident"
+  },
+  {
+    "id": "q08",
+    "type": "factual",
+    "question": "How long must a provider keep the technical documentation of a high-risk AI system at the disposal of national competent authorities?",
+    "reference_answer": "For a period ending 10 years after the high-risk AI system has been placed on the market or put into service (Article 18).",
+    "required_facts": [["10 years", "ten years"]],
+    "evidence": "The provider shall, for a period ending 10 years after the high-risk AI system has been placed on the market"
+  },
+  {
+    "id": "q09",
+    "type": "factual",
+    "question": "By when must each Member State have at least one AI regulatory sandbox operational at national level?",
+    "reference_answer": "By 2 August 2026 (Article 57(1)).",
+    "required_facts": [["2 august 2026", "august 2, 2026", "2026-08-02"]],
+    "evidence": "establish at least one AI regulatory sandbox at national level, which shall be operational by 2 August 2026"
+  },
+  {
+    "id": "q10",
+    "type": "factual",
+    "question": "How is the European Artificial Intelligence Board composed and how long is a representative's term?",
+    "reference_answer": "One representative per Member State, with the EDPS as observer and the AI Office attending without voting; representatives are designated for three years, renewable once (Article 65).",
+    "required_facts": [["one representative per member state", "one representative from each member state", "one representative for each member state"], ["three years", "3 years", "3-year", "three-year"]],
+    "evidence": "The Board shall be composed of one representative per Member State"
+  },
+  {
+    "id": "q11",
+    "type": "factual",
+    "question": "What obligation do deployers have when an AI system generates or manipulates content constituting a deep fake?",
+    "reference_answer": "They must disclose that the content has been artificially generated or manipulated (Article 50(4)), with limited exceptions for law enforcement and lighter disclosure for evidently artistic/satirical works.",
+    "required_facts": [["disclose"], ["artificially generated", "generated or manipulated", "ai-generated", "ai generated"]],
+    "evidence": "Deployers of an AI system that generates or manipulates image, audio or video content constituting a deep fake, shall disclose"
+  },
+  {
+    "id": "q12",
+    "type": "factual",
+    "question": "What does Article 4 of the AI Act require regarding AI literacy?",
+    "reference_answer": "Providers and deployers must take measures to ensure, to their best extent, a sufficient level of AI literacy of their staff and others operating AI systems on their behalf.",
+    "required_facts": [["providers"], ["deployers"], ["staff"]],
+    "evidence": "Providers and deployers of AI systems shall take measures to ensure, to their best extent, a sufficient level of AI literacy"
+  },
+  {
+    "id": "q13",
+    "type": "factual",
+    "question": "How does the AI Act define an 'AI system'?",
+    "reference_answer": "A machine-based system designed to operate with varying levels of autonomy, that may exhibit adaptiveness after deployment, and that infers from input how to generate outputs such as predictions, content, recommendations or decisions that can influence physical or virtual environments (Article 3(1)).",
+    "required_facts": [["machine-based", "machine based"], ["autonomy"], ["infer"]],
+    "evidence": "‘AI system’ means a machine-based system that is designed to operate with varying levels of autonomy"
+  },
+  {
+    "id": "q14",
+    "type": "factual",
+    "question": "Is it allowed to build facial recognition databases by scraping facial images from the internet?",
+    "reference_answer": "No. Creating or expanding facial recognition databases through the untargeted scraping of facial images from the internet or CCTV footage is a prohibited practice (Article 5(1)(e)).",
+    "required_facts": [["prohibit", "not allowed", "banned", "forbidden"], ["untargeted"]],
+    "evidence": "expand facial recognition databases through the untargeted scraping of facial images from the internet or CCTV footage;"
+  },
+  {
+    "id": "q15",
+    "type": "factual",
+    "question": "Which areas related to education are listed as high-risk in Annex III?",
+    "reference_answer": "AI systems used to determine access/admission or assign persons to educational institutions, to evaluate learning outcomes, to assess the appropriate level of education, and to monitor prohibited behaviour during tests (Annex III, point 3).",
+    "required_facts": [["admission", "access"], ["learning outcomes"]],
+    "evidence": "AI systems intended to be used to evaluate learning outcomes"
+  },
+  {
+    "id": "q16",
+    "type": "factual",
+    "question": "On what date was the AI Act (Regulation (EU) 2024/1689) adopted?",
+    "reference_answer": "13 June 2024.",
+    "required_facts": [["13 june 2024", "june 13, 2024", "2024-06-13"]],
+    "evidence": "REGULATION (EU) 2024/1689 OF THE EUROPEAN PARLIAMENT AND OF THE COUNCIL of 13 June 2024"
+  },
+  {
+    "id": "q17",
+    "type": "out_of_scope",
+    "question": "Who is the King of Sweden?",
+    "reference_answer": "Not covered by the EU AI Act corpus; the assistant should say it cannot answer from the documents.",
+    "required_facts": [],
+    "evidence": null
+  },
+  {
+    "id": "q18",
+    "type": "out_of_scope",
+    "question": "What is the maximum fine under the GDPR for infringing the basic principles for processing?",
+    "reference_answer": "Not in the corpus (that is GDPR Art. 83(5), not the AI Act); the assistant should state the documents do not contain this.",
+    "required_facts": [],
+    "evidence": null
+  }
+]

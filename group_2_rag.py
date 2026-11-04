@@ -68,16 +68,19 @@ def paragraph_aware_chunking(raw_docs, max_chunk_len=1000):
 
     return all_chunks, all_sources
 
-def rag_generate(
+def retrieve(
     query: str,
-    llm_client: object,
     bm25_index: object,
     embed_model: object,
     corpus_embeddings: np.ndarray,
     chunks: list[str],
-    chunk_sources: list[str],
     top_k: int = 5,
-) -> tuple[str, list[str]]:
+) -> list[int]:
+    """Hybrid BM25 + semantic retrieval with paragraph-number filtering.
+
+    Returns the indices of the chunks that are passed to the LLM as context.
+    Split out of `rag_generate` so the evaluation script can score retrieval.
+    """
     match = re.search(r'\(?(\d+)\)?', query)
     if match:
         paragraph_num = match.group(1)
@@ -91,15 +94,12 @@ def rag_generate(
     semantic_results = semantic_search(lookup_key, embed_model, corpus_embeddings, chunks, top_k=top_k)
 
     retrieved_indices = []
-    seen_contents = set()
-
+    seen = set()
     for result in bm25_results + semantic_results:
-        if isinstance(result, dict) and 'content' in result:
-            content = result['content']
-            if content not in seen_contents:
-                seen_contents.add(content)
-                if content in chunks:
-                    retrieved_indices.append(chunks.index(content))
+        idx = result["chunk_idx"]
+        if idx not in seen:
+            seen.add(idx)
+            retrieved_indices.append(idx)
 
     relevant_indices = []
     for idx in retrieved_indices:
@@ -108,7 +108,23 @@ def rag_generate(
             relevant_indices.append(idx)
 
     if not relevant_indices:
-         relevant_indices = retrieved_indices[:2]
+        relevant_indices = retrieved_indices[:2]
+
+    return relevant_indices
+
+
+def rag_generate(
+    query: str,
+    llm_client: object,
+    bm25_index: object,
+    embed_model: object,
+    corpus_embeddings: np.ndarray,
+    chunks: list[str],
+    chunk_sources: list[str],
+    top_k: int = 5,
+    return_indices: bool = False,
+):
+    relevant_indices = retrieve(query, bm25_index, embed_model, corpus_embeddings, chunks, top_k=top_k)
 
     focused_chunks = [chunks[idx] for idx in relevant_indices]
     sources = [chunk_sources[idx] for idx in relevant_indices]
@@ -119,6 +135,8 @@ def rag_generate(
 
     response = llm_client.generate(history=[{"role": "system", "content": system_prompt}], prompt=final_user_prompt, temperature=1.0, max_tokens=1024)
 
+    if return_indices:
+        return response, list(set(sources)), relevant_indices
     return response, list(set(sources))
 
 def load_data_from_folder(folder_path):
