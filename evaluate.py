@@ -72,14 +72,15 @@ def main():
     load_dotenv()
     llm = create_llm_client()
     embed_model = load_embedding_model()
-    raw_docs = load_data_from_folder("data")
+    raw_docs = load_data_from_folder("data", clean=False)  # baseline works on the raw PDF text
+    clean_docs = load_data_from_folder("data")
 
     # Naive RAG index
     naive_chunks = fixed_size_chunking(raw_docs)
     naive_emb = embed_texts(naive_chunks, embed_model)
 
     # Group 2 index
-    g2_chunks, g2_sources = paragraph_aware_chunking(raw_docs)
+    g2_chunks, g2_sources = paragraph_aware_chunking(clean_docs)
     g2_bm25 = build_bm25_index(g2_chunks)
     g2_emb = embed_texts(g2_chunks, embed_model)
 
