@@ -18,10 +18,10 @@
 - `naive_rag`: fixed 1000-char chunks + semantic search (base RAG)
 - `group2`: our pipeline in `main.py`
 
-For each answer it checks whether the passage that answers the question was retrieved, and whether the answer contains an expected keyword.
+For each RAG system it checks whether the passage that answers the question was retrieved. Answer correctness is graded by hand in the `correct` column of the CSV.
 
 ```bash
 python evaluate.py
 ```
 
-Prints a summary and saves all answers to `evaluation_results.csv`.
+Prints a retrieval summary and saves all answers to `evaluation_results.csv`.

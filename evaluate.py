@@ -5,9 +5,9 @@ evaluate.py — Compare three systems on 10 EU AI Act questions.
   naive_rag  fixed-size chunks + semantic search (base RAG)
   group2     our pipeline from main.py
 
-For each question we check:
-  retrieved  is the passage that answers the question in the context sent to the LLM?
-  correct    does the answer contain one of the expected keywords?
+For each question we check whether the passage that answers it (`evidence`) was in the
+context sent to the LLM. Answers are saved to evaluation_results.csv and graded by hand
+in the `correct` column.
 
 Run:  python evaluate.py
 """
@@ -21,56 +21,46 @@ from main import load_data_from_folder, paragraph_aware_chunking, rag_generate
 
 TOP_K = 5
 
-# question, keywords (answer is correct if it contains any of them), evidence (verbatim text from the PDF)
+# question, evidence (verbatim text from the PDF that answers the question)
 QUESTIONS = [
     {
         "question": "What is written in paragraph 155?",
-        "keywords": ["post-market monitoring"],
         "evidence": "(155) In order to ensure that providers of high-risk AI systems",
     },
     {
         "question": "What is the maximum fine for engaging in a prohibited AI practice under Article 5?",
-        "keywords": ["35 000 000", "35,000,000", "35 million"],
         "evidence": "fines of up to EUR 35 000 000",
     },
     {
         "question": "What fine applies for supplying incorrect or misleading information to notified bodies or national competent authorities?",
-        "keywords": ["7 500 000", "7,500,000", "7.5 million"],
         "evidence": "fines of up to EUR 7 500 000",
     },
     {
         "question": "From which date do the prohibitions on AI practices apply?",
-        "keywords": ["2 February 2025", "February 2, 2025"],
         "evidence": "Chapters I and II shall apply from 2 February 2025",
     },
     {
         "question": "When does Article 6(1) and the corresponding obligations apply?",
-        "keywords": ["2 August 2027", "August 2, 2027"],
         "evidence": "shall apply from 2 August 2027",
     },
     {
         "question": "Within how many days must a provider report a serious incident caused by a high-risk AI system?",
-        "keywords": ["15 days", "fifteen days"],
         "evidence": "15 days after the provider or, where applicable, the deployer, becomes aware of the serious incident",
     },
     {
         "question": "How long must a provider keep the technical documentation of a high-risk AI system?",
-        "keywords": ["10 years", "ten years"],
         "evidence": "for a period ending 10 years after the high-risk AI system",
     },
     {
         "question": "For how long is a Member State representative on the European Artificial Intelligence Board designated?",
-        "keywords": ["three years", "3 years"],
         "evidence": "for a period of three years, renewable once",
     },
     {
         "question": "What must deployers do when their AI system generates a deep fake?",
-        "keywords": ["disclose"],
         "evidence": "constituting a deep fake, shall",
     },
     {
         "question": "Who must ensure a sufficient level of AI literacy, and for whom?",
-        "keywords": ["staff"],
         "evidence": "sufficient level of AI literacy of",
     },
 ]
@@ -126,28 +116,25 @@ def main():
         context = "\n\n".join(g2_chunks[i] for i in indices)
         rows.append(("group2", question, context, g2_answer))
 
-    # Score
+    # Score retrieval; correctness is graded by hand in the CSV
     results = []
     for system, question, context, answer in rows:
         q = next(q for q in QUESTIONS if q["question"] == question)
-        correct = any(k.lower() in answer.lower() for k in q["keywords"])
         retrieved = q["evidence"] in context if context is not None else None
         results.append({"system": system, "question": question, "retrieved": retrieved,
-                        "correct": correct, "answer": answer})
-        print(f"{system:<10} retrieved={retrieved!s:<5} correct={correct!s:<5} {question}")
+                        "answer": answer, "correct": ""})
+        print(f"{system:<10} retrieved={retrieved!s:<5} {question}")
 
-    print("\nsystem      retrieved  correct")
-    for system in ["direct", "naive_rag", "group2"]:
+    print("\nsystem      retrieved")
+    for system in ["naive_rag", "group2"]:
         r = [x for x in results if x["system"] == system]
-        retrieved = sum(bool(x["retrieved"]) for x in r)
-        correct = sum(x["correct"] for x in r)
-        print(f"{system:<10}  {retrieved if system != 'direct' else '-':>4}/{len(r)}  {correct:>5}/{len(r)}")
+        print(f"{system:<10}  {sum(x['retrieved'] for x in r):>4}/{len(r)}")
 
     with open("evaluation_results.csv", "w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=results[0].keys())
         writer.writeheader()
         writer.writerows(results)
-    print("\nAll answers saved to evaluation_results.csv")
+    print("\nAll answers saved to evaluation_results.csv - fill in the 'correct' column by hand")
 
 
 if __name__ == "__main__":
